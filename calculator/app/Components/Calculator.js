@@ -9,12 +9,17 @@ export default function Calculator() {
   const [expression, setExpression] = useState('');
   const mainRef = useRef(null);
 
+  const handleLimitDecimal = (expr) => {
+    return expr.replace(/(\d*\.\d{9})\d*/g, '$1');
+  };
+
   const handleButtonClick = (value) => {
     if (value === '=') {
       try {
         const evalResult = eval(expression).toString();
-        setResult(evalResult);
-        setExpression(evalResult);
+        const limitedResult = handleLimitDecimal(evalResult);
+        setResult(limitedResult);
+        setExpression(limitedResult);
       } catch (error) {
         setResult('Error');
       }
@@ -27,20 +32,21 @@ export default function Calculator() {
       try {
         const evalResult = eval(expression).toString();
         const percentage = (parseFloat(evalResult) / 100).toString();
-        setResult(percentage);
-        setExpression(percentage);
+        const limitedPercentage = handleLimitDecimal(percentage);
+        setResult(limitedPercentage);
+        setExpression(limitedPercentage);
       } catch (error) {
         setResult('Error');
       }
     } else {
-      setExpression((prevExpression) => prevExpression + value);
+      setExpression((prevExpression) => handleLimitDecimal(prevExpression + value));
     }
 
     mainRef.current.focus();
   };
 
   const handleKeyPress = (event) => {
-    const validKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '/', '*', '-', '+', '%',  'c', 'C', 'Backspace'];
+    const validKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '/', '*', '-', '+', '%', 'c', 'C', 'Backspace'];
     const key = event.key;
     if (validKeys.includes(key)) {
       if (key.toLowerCase() === 'c') {
