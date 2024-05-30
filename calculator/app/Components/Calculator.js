@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import '../globals.css';
 import Screen from './Screen';
 import Buttons from './Buttons';
+import React from 'react';
+
 
 export default function Calculator() {
   const [result, setResult] = useState('');
